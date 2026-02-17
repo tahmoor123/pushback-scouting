@@ -54,6 +54,7 @@ function saveMatch(){
 }
 
 // Live Dashboard
+// Live Dashboard + Pick Score
 database.ref("matches").on("value", snapshot=>{
   let data = snapshot.val();
   let statsDiv = document.getElementById("stats");
@@ -69,9 +70,17 @@ database.ref("matches").on("value", snapshot=>{
 
   Object.values(data).forEach(m=>{
     if(!teamStats[m.team]){
-      teamStats[m.team] = { total:0, count:0 };
+      teamStats[m.team] = {
+        total:0,
+        off:0,
+        def:0,
+        count:0
+      };
     }
+
     teamStats[m.team].total += m.total;
+    teamStats[m.team].off += m.off;
+    teamStats[m.team].def += m.def;
     teamStats[m.team].count++;
   });
 
@@ -79,27 +88,45 @@ database.ref("matches").on("value", snapshot=>{
 
   Object.keys(teamStats).forEach(team=>{
     let avg = teamStats[team].total / teamStats[team].count;
-    rankings.push({ team, avg });
+    let avgOff = teamStats[team].off / teamStats[team].count;
+    let avgDef = teamStats[team].def / teamStats[team].count;
+
+    // 🔥 PICK SCORE FORMULA
+    let pickScore = (avg * 0.6) + (avgOff * 0.2) + (avgDef * 0.2);
+
+    rankings.push({
+      team,
+      avg,
+      avgOff,
+      avgDef,
+      pickScore
+    });
   });
 
-  rankings.sort((a,b)=>b.avg - a.avg);
+  rankings.sort((a,b)=>b.pickScore - a.pickScore);
 
   let table = "<table border='1' width='100%'>";
-  table += "<tr><th>Rank</th><th>Team</th><th>Avg</th></tr>";
+  table += "<tr><th>Rank</th><th>Team</th><th>Avg</th><th>Pick Score</th></tr>";
 
   rankings.forEach((r,i)=>{
     table += `<tr>
       <td>${i+1}</td>
       <td>${r.team}</td>
       <td>${r.avg.toFixed(1)}</td>
+      <td>${r.pickScore.toFixed(1)}</td>
     </tr>`;
   });
 
   table += "</table>";
 
   statsDiv.innerHTML = table;
+
+  // Save for search use
+  window.currentRankings = rankings;
 });
+
 
 // Initialize
 loadTeams();
 showPage("pit");
+

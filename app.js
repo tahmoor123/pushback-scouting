@@ -1,8 +1,64 @@
-// Live Dashboard Auto Update
+// Load Teams
+function loadTeams(){
+  let pitSelect=document.getElementById("pitTeam");
+  let matchSelect=document.getElementById("matchTeam");
+
+  teams.forEach(team=>{
+    pitSelect.innerHTML+=`<option>${team}</option>`;
+    matchSelect.innerHTML+=`<option>${team}</option>`;
+  });
+}
+
+// Show Page
+function showPage(id){
+  document.querySelectorAll(".page")
+    .forEach(p=>p.style.display="none");
+  document.getElementById(id).style.display="block";
+}
+
+// Save Pit Data
+function savePit(){
+  let team=document.getElementById("pitTeam").value;
+
+  let data={
+    drive:driveType.value,
+    auto:autoStrategy.value,
+    cycle:cycleSpeed.value,
+    strengths:strengths.value,
+    weaknesses:weaknesses.value,
+    timestamp:Date.now()
+  };
+
+  database.ref("pit/"+team).set(data);
+  alert("Pit Data Synced");
+}
+
+// Save Match Data
+function saveMatch(){
+  let entry={
+    team:matchTeam.value,
+    match:matchNumber.value,
+    auto:Number(autoPoints.value),
+    driver:Number(driverPoints.value),
+    endgame:Number(endgamePoints.value),
+    off:Number(offRating.value),
+    def:Number(defRating.value),
+    total:Number(autoPoints.value)+
+          Number(driverPoints.value)+
+          Number(endgamePoints.value),
+    timestamp:Date.now()
+  };
+
+  database.ref("matches").push(entry);
+  alert("Match Synced");
+}
+
+// Live Dashboard
 database.ref("matches").on("value", snapshot=>{
   let data = snapshot.val();
   let statsDiv = document.getElementById("stats");
-  statsDiv.innerHTML = "";
+
+  if(!statsDiv) return;
 
   if(!data){
     statsDiv.innerHTML = "<p>No data yet</p>";
@@ -13,81 +69,37 @@ database.ref("matches").on("value", snapshot=>{
 
   Object.values(data).forEach(m=>{
     if(!teamStats[m.team]){
-      teamStats[m.team] = {
-        total:0,
-        count:0,
-        autoSuccess:0,
-        endgameSuccess:0,
-        offTotal:0,
-        defTotal:0
-      };
+      teamStats[m.team] = { total:0, count:0 };
     }
-
     teamStats[m.team].total += m.total;
     teamStats[m.team].count++;
-    if(m.auto > 0) teamStats[m.team].autoSuccess++;
-    if(m.endgame > 0) teamStats[m.team].endgameSuccess++;
-    teamStats[m.team].offTotal += m.off;
-    teamStats[m.team].defTotal += m.def;
   });
 
   let rankings = [];
 
   Object.keys(teamStats).forEach(team=>{
-    let t = teamStats[team];
-
-    let avg = t.total / t.count;
-    let autoPct = (t.autoSuccess / t.count) * 100;
-    let endPct = (t.endgameSuccess / t.count) * 100;
-    let offAvg = t.offTotal / t.count;
-    let defAvg = t.defTotal / t.count;
-
-    let pickScore =
-      (avg * 0.4) +
-      (autoPct * 0.2) +
-      (endPct * 0.2) +
-      (offAvg * 5 * 0.1) +
-      (defAvg * 5 * 0.1);
-
-    rankings.push({
-      team,
-      avg,
-      autoPct,
-      endPct,
-      pickScore
-    });
+    let avg = teamStats[team].total / teamStats[team].count;
+    rankings.push({ team, avg });
   });
 
-  // Sort highest first
-  rankings.sort((a,b)=>b.pickScore - a.pickScore);
+  rankings.sort((a,b)=>b.avg - a.avg);
 
-  // Build table
-  let table = `
-    <table border="1" width="100%" style="border-collapse:collapse">
-      <tr>
-        <th>Rank</th>
-        <th>Team</th>
-        <th>Avg</th>
-        <th>Auto%</th>
-        <th>End%</th>
-        <th>Pick Score</th>
-      </tr>
-  `;
+  let table = "<table border='1' width='100%'>";
+  table += "<tr><th>Rank</th><th>Team</th><th>Avg</th></tr>";
 
   rankings.forEach((r,i)=>{
-    table += `
-      <tr>
-        <td>${i+1}</td>
-        <td>${r.team}</td>
-        <td>${r.avg.toFixed(1)}</td>
-        <td>${r.autoPct.toFixed(0)}%</td>
-        <td>${r.endPct.toFixed(0)}%</td>
-        <td>${r.pickScore.toFixed(1)}</td>
-      </tr>
-    `;
+    table += `<tr>
+      <td>${i+1}</td>
+      <td>${r.team}</td>
+      <td>${r.avg.toFixed(1)}</td>
+    </tr>`;
   });
 
   table += "</table>";
 
   statsDiv.innerHTML = table;
 });
+
+// Initialize
+loadTeams();
+showPage("pit");

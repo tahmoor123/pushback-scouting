@@ -88,8 +88,27 @@
 <div id="stats"></div>
 <button onclick="exportCSV()">Export CSV</button>
 </section>
+<!-- Firebase CDN -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyD-9J_hC2UveuvJEVA3HyM2N575jJTlcU0",
+    authDomain: "pushback-scouting.firebaseapp.com",
+    databaseURL: "https://pushback-scouting-default-rtdb.firebaseio.com",
+    projectId: "pushback-scouting",
+    storageBucket: "pushback-scouting.firebasestorage.app",
+    messagingSenderId: "807660827899",
+    appId: "1:807660827899:web:333cdeb03e2763357eac5e"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const database = firebase.database();
+</script>
 
 <script src="teams.js"></script>
 <script src="app.js"></script>
 </body>
+
 </html>

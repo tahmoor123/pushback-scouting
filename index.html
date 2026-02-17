@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Push Back Scouting</title>
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
+</head>
+<body>
+
+<header>
+<h1>Push Back Scouting</h1>
+</header>
+
+<nav>
+<button onclick="showPage('pit')">Pit Scouting</button>
+<button onclick="showPage('match')">Match Scouting</button>
+<button onclick="showPage('dashboard')">Dashboard</button>
+</nav>
+
+<section id="pit" class="page">
+<h2>Pit Scouting</h2>
+<select id="pitTeam"></select>
+
+<label>Drive Type</label>
+<select id="driveType">
+<option>Tank</option>
+<option>X-Drive</option>
+<option>H-Drive</option>
+<option>Custom</option>
+</select>
+
+<label>Autonomous Strategy</label>
+<input id="autoStrategy">
+
+<label>Cycle Speed</label>
+<select id="cycleSpeed">
+<option>Slow</option>
+<option>Medium</option>
+<option>Fast</option>
+</select>
+
+<label>Strengths</label>
+<textarea id="strengths"></textarea>
+
+<label>Weaknesses</label>
+<textarea id="weaknesses"></textarea>
+
+<button onclick="savePit()">Save Pit Data</button>
+</section>
+
+<section id="match" class="page">
+<h2>Match Scouting</h2>
+
+<select id="matchTeam"></select>
+
+<label>Match #</label>
+<input type="number" id="matchNumber">
+
+<h3>Autonomous</h3>
+<label>Mobility</label>
+<input type="checkbox" id="mobility">
+
+<label>Auto Points</label>
+<input type="number" id="autoPoints">
+
+<h3>Driver</h3>
+<label>Driver Points</label>
+<input type="number" id="driverPoints">
+
+<label>Offensive Rating (1-5)</label>
+<input type="number" min="1" max="5" id="offRating">
+
+<label>Defensive Rating (1-5)</label>
+<input type="number" min="1" max="5" id="defRating">
+
+<h3>Endgame</h3>
+<label>Endgame Points</label>
+<input type="number" id="endgamePoints">
+
+<button onclick="saveMatch()">Save Match Data</button>
+</section>
+
+<section id="dashboard" class="page">
+<h2>Analytics</h2>
+<button onclick="generateAnalytics()">Generate Stats</button>
+<div id="stats"></div>
+<button onclick="exportCSV()">Export CSV</button>
+</section>
+
+<script src="teams.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

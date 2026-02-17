@@ -1,0 +1,9 @@
+{
+"name": "Push Back Scouting",
+"short_name": "Scouting",
+"start_url": ".",
+"display": "standalone",
+"background_color": "#111111",
+"theme_color": "#000000",
+"icons": []
+}

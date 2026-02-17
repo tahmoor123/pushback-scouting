@@ -125,8 +125,33 @@ database.ref("matches").on("value", snapshot=>{
   window.currentRankings = rankings;
 });
 
+function searchTeam(){
+  let teamNumber = document.getElementById("teamSearch").value;
+  let resultDiv = document.getElementById("teamDetails");
+
+  if(!window.currentRankings){
+    resultDiv.innerHTML = "No data loaded yet.";
+    return;
+  }
+
+  let team = window.currentRankings.find(t => t.team == teamNumber);
+
+  if(!team){
+    resultDiv.innerHTML = "Team not found.";
+    return;
+  }
+
+  resultDiv.innerHTML = `
+    <h3>Team ${team.team}</h3>
+    <p><b>Avg Score:</b> ${team.avg.toFixed(1)}</p>
+    <p><b>Off Rating:</b> ${team.avgOff.toFixed(1)}</p>
+    <p><b>Def Rating:</b> ${team.avgDef.toFixed(1)}</p>
+    <p><b>Pick Score:</b> ${team.pickScore.toFixed(1)}</p>
+  `;
+}
 
 // Initialize
 loadTeams();
 showPage("pit");
+
 

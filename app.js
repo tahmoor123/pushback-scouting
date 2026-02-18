@@ -32,27 +32,76 @@ function savePit(){
   database.ref("pit/"+team).set(data);
   alert("Pit Data Synced");
 }
+// Clear pit fields (optional but recommended)
+driveType.value = "";
+autoStrategy.value = "";
+cycleSpeed.value = "";
+strengths.value = "";
+weaknesses.value = "";
+pitComments.value = "";
+
+// Focus team field
+pitTeam.focus();
+
 
 // Save Match Data
 function saveMatch(){
-  let entry={
-    team:matchTeam.value,
-    match:matchNumber.value,
-    auto:Number(autoPoints.value),
-    driver:Number(driverPoints.value),
-    endgame:Number(endgamePoints.value),
-    off:Number(offRating.value),
-    def:Number(defRating.value),
-    comments: matchComments.value,
-    total:Number(autoPoints.value)+
-          Number(driverPoints.value)+
-          Number(endgamePoints.value),
-    timestamp:Date.now()
-  };
 
-  database.ref("matches").push(entry);
-  alert("Match Synced");
+  let team = matchTeam.value;
+  let matchNum = matchNumber.value;
+
+  database.ref("matches")
+    .orderByChild("team")
+    .equalTo(team)
+    .once("value", snapshot=>{
+
+      let exists = false;
+
+      snapshot.forEach(child=>{
+        let data = child.val();
+        if(data.match == matchNum){
+          exists = true;
+        }
+      });
+
+      if(exists){
+        alert("⚠️ This team already has data for this match!");
+        return;
+      }
+
+      let entry={
+        team: team,
+        match: matchNum,
+        auto:Number(autoPoints.value),
+        driver:Number(driverPoints.value),
+        endgame:Number(endgamePoints.value),
+        off:Number(offRating.value),
+        def:Number(defRating.value),
+        comments: matchComments.value,
+        total:Number(autoPoints.value)+
+              Number(driverPoints.value)+
+              Number(endgamePoints.value),
+        timestamp:Date.now()
+      };
+
+      database.ref("matches").push(entry);
+
+      alert("Match Synced");
+
+      // Clear fields
+      matchNumber.value = "";
+      autoPoints.value = "";
+      driverPoints.value = "";
+      endgamePoints.value = "";
+      offRating.value = "";
+      defRating.value = "";
+      matchComments.value = "";
+
+      matchNumber.focus();
+    });
 }
+
+
 
 // Live Dashboard
 // Live Dashboard + Pick Score
@@ -209,10 +258,19 @@ function searchTeam(teamFromClick){
   });
 }
 
+document.addEventListener("keydown", function(e){
+  if(e.key === "Enter"){
+    if(document.getElementById("match").style.display === "block"){
+      saveMatch();
+    }
+  }
+});
+
 
 // Initialize
 loadTeams();
 showPage("pit");
+
 
 
 

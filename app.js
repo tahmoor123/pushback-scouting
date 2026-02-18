@@ -26,6 +26,7 @@ function savePit(){
   strengths:strengths.value,
   weaknesses:weaknesses.value,
   comments:pitComments.value,
+  scout: getScoutName(),
   timestamp:Date.now()
 };
 
@@ -78,6 +79,7 @@ function saveMatch(){
         off:Number(offRating.value),
         def:Number(defRating.value),
         comments: matchComments.value,
+        scout: getScoutName(),
         total:Number(autoPoints.value)+
               Number(driverPoints.value)+
               Number(endgamePoints.value),
@@ -223,8 +225,8 @@ function searchTeam(teamFromClick){
       if(matches){
         Object.values(matches).forEach(m=>{
           if(m.team == teamNumber && m.comments){
-            matchComments.push(
-              `<li><b>Match ${m.match}:</b> ${m.comments}</li>`
+           matchComments.push(
+            `<li><b>Match ${m.match}</b> (${m.scout || "Unknown"}): ${m.comments}</li>`
             );
           }
         });
@@ -265,11 +267,27 @@ document.addEventListener("keydown", function(e){
     }
   }
 });
+function saveScoutName(){
+  let name = document.getElementById("scoutName").value;
+
+  if(!name){
+    alert("Please enter your name");
+    return;
+  }
+
+  localStorage.setItem("scoutName", name);
+  alert("Name Saved!");
+}
+
+function getScoutName(){
+  return localStorage.getItem("scoutName") || "Unknown";
+}
 
 
 // Initialize
 loadTeams();
 showPage("pit");
+
 
 
 

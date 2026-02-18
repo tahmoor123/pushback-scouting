@@ -147,7 +147,7 @@ function searchTeam(){
   database.ref("pit/"+teamNumber).once("value").then(pitSnap=>{
     let pitData = pitSnap.val();
 
-    // Load Match Comments
+    // Load Match Data
     database.ref("matches").once("value").then(matchSnap=>{
       let matches = matchSnap.val();
 
@@ -166,6 +166,8 @@ function searchTeam(){
       resultDiv.innerHTML = `
         <h3>Team ${team.team}</h3>
         <p><b>Avg Score:</b> ${team.avg.toFixed(1)}</p>
+        <p><b>Off Rating:</b> ${team.avgOff.toFixed(1)}</p>
+        <p><b>Def Rating:</b> ${team.avgDef.toFixed(1)}</p>
         <p><b>Pick Score:</b> ${team.pickScore.toFixed(1)}</p>
 
         <hr>
@@ -193,6 +195,7 @@ function searchTeam(){
 // Initialize
 loadTeams();
 showPage("pit");
+
 
 
 

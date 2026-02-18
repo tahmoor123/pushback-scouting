@@ -91,7 +91,7 @@ Deploy using:
 
 Hard refresh the browser after updates.
 
-Competition Workflow
+Competition Workflow:
 
   Scouts enter their name once.
   Pit scouting cis ompleted before matches.
@@ -108,6 +108,6 @@ Recommended Usage
 
 
 
-🤝 Built For
+Built For
 
 Designed to give competitive teams a strategic edge during qualification and elimination rounds.

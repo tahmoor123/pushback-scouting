@@ -21,13 +21,14 @@ function savePit(){
   let team=document.getElementById("pitTeam").value;
 
   let data={
-    drive:driveType.value,
-    auto:autoStrategy.value,
-    cycle:cycleSpeed.value,
-    strengths:strengths.value,
-    weaknesses:weaknesses.value,
-    timestamp:Date.now()
-  };
+  drive:driveType.value,
+  auto:autoStrategy.value,
+  cycle:cycleSpeed.value,
+  strengths:strengths.value,
+  weaknesses:weaknesses.value,
+  comments:pitComments.value,
+  timestamp:Date.now()
+};
 
   database.ref("pit/"+team).set(data);
   alert("Pit Data Synced");
@@ -43,6 +44,7 @@ function saveMatch(){
     endgame:Number(endgamePoints.value),
     off:Number(offRating.value),
     def:Number(defRating.value),
+    comments: matchComments.value,
     total:Number(autoPoints.value)+
           Number(driverPoints.value)+
           Number(endgamePoints.value),
@@ -153,5 +155,6 @@ function searchTeam(){
 // Initialize
 loadTeams();
 showPage("pit");
+
 
 

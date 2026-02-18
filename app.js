@@ -143,18 +143,57 @@ function searchTeam(){
     return;
   }
 
-  resultDiv.innerHTML = `
-    <h3>Team ${team.team}</h3>
-    <p><b>Avg Score:</b> ${team.avg.toFixed(1)}</p>
-    <p><b>Off Rating:</b> ${team.avgOff.toFixed(1)}</p>
-    <p><b>Def Rating:</b> ${team.avgDef.toFixed(1)}</p>
-    <p><b>Pick Score:</b> ${team.pickScore.toFixed(1)}</p>
-  `;
+  // Load Pit Data
+  database.ref("pit/"+teamNumber).once("value").then(pitSnap=>{
+    let pitData = pitSnap.val();
+
+    // Load Match Comments
+    database.ref("matches").once("value").then(matchSnap=>{
+      let matches = matchSnap.val();
+
+      let matchComments = [];
+
+      if(matches){
+        Object.values(matches).forEach(m=>{
+          if(m.team == teamNumber && m.comments){
+            matchComments.push(
+              `<li><b>Match ${m.match}:</b> ${m.comments}</li>`
+            );
+          }
+        });
+      }
+
+      resultDiv.innerHTML = `
+        <h3>Team ${team.team}</h3>
+        <p><b>Avg Score:</b> ${team.avg.toFixed(1)}</p>
+        <p><b>Pick Score:</b> ${team.pickScore.toFixed(1)}</p>
+
+        <hr>
+
+        <h4>Pit Notes</h4>
+        <p><b>Drive:</b> ${pitData?.drive || "N/A"}</p>
+        <p><b>Auto:</b> ${pitData?.auto || "N/A"}</p>
+        <p><b>Cycle:</b> ${pitData?.cycle || "N/A"}</p>
+        <p><b>Strengths:</b> ${pitData?.strengths || "N/A"}</p>
+        <p><b>Weaknesses:</b> ${pitData?.weaknesses || "N/A"}</p>
+        <p><b>Comments:</b> ${pitData?.comments || "None"}</p>
+
+        <hr>
+
+        <h4>Match Comments</h4>
+        <ul style="max-height:150px; overflow-y:auto;">
+          ${matchComments.length ? matchComments.join("") : "No match comments yet."}
+        </ul>
+      `;
+    });
+  });
 }
+
 
 // Initialize
 loadTeams();
 showPage("pit");
+
 
 
 

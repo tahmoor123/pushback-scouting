@@ -73,14 +73,14 @@ database.ref("matches").on("value", snapshot=>{
   Object.values(data).forEach(m=>{
     if(!teamStats[m.team]){
       teamStats[m.team] = {
-        total:0,
+        scores: [],
         off:0,
         def:0,
         count:0
       };
     }
 
-    teamStats[m.team].total += m.total;
+    teamStats[m.team].scores.push(m.total);
     teamStats[m.team].off += m.off;
     teamStats[m.team].def += m.def;
     teamStats[m.team].count++;
@@ -89,32 +89,51 @@ database.ref("matches").on("value", snapshot=>{
   let rankings = [];
 
   Object.keys(teamStats).forEach(team=>{
-    let avg = teamStats[team].total / teamStats[team].count;
+    let scores = teamStats[team].scores;
+    let avg = scores.reduce((a,b)=>a+b,0) / scores.length;
+
+    // Consistency (standard deviation)
+    let variance = scores.reduce((sum,score)=>{
+      return sum + Math.pow(score - avg,2);
+    },0) / scores.length;
+
+    let stdDev = Math.sqrt(variance);
+
     let avgOff = teamStats[team].off / teamStats[team].count;
     let avgDef = teamStats[team].def / teamStats[team].count;
 
-    // 🔥 PICK SCORE FORMULA
-    let pickScore = (avg * 0.6) + (avgOff * 0.2) + (avgDef * 0.2);
+    // 🔥 PICK SCORE WITH CONSISTENCY BONUS
+    let pickScore =
+      (avg * 0.5) +
+      (avgOff * 0.15) +
+      (avgDef * 0.15) -
+      (stdDev * 0.2);   // penalize inconsistency
 
     rankings.push({
       team,
       avg,
       avgOff,
       avgDef,
-      pickScore
+      pickScore,
+      stdDev
     });
   });
 
   rankings.sort((a,b)=>b.pickScore - a.pickScore);
 
   let table = "<table border='1' width='100%'>";
-  table += "<tr><th>Rank</th><th>Team</th><th>Avg</th><th>Pick Score</th></tr>";
+  table += "<tr><th>Rank</th><th>Team</th><th>Avg</th><th>Cons.</th><th>Pick Score</th></tr>";
 
   rankings.forEach((r,i)=>{
-    table += `<tr>
+    let highlight = i < 8 ? "style='background:#1f3d1f'" : "";
+
+    table += `<tr ${highlight}>
       <td>${i+1}</td>
-      <td>${r.team}</td>
+      <td onclick="searchTeam('${r.team}')" style="cursor:pointer;color:lightblue;">
+        ${r.team}
+      </td>
       <td>${r.avg.toFixed(1)}</td>
+      <td>${r.stdDev.toFixed(1)}</td>
       <td>${r.pickScore.toFixed(1)}</td>
     </tr>`;
   });
@@ -123,12 +142,12 @@ database.ref("matches").on("value", snapshot=>{
 
   statsDiv.innerHTML = table;
 
-  // Save for search use
   window.currentRankings = rankings;
 });
 
-function searchTeam(){
-  let teamNumber = document.getElementById("teamSearch").value;
+
+function searchTeam(teamFromClick){
+  let teamNumber = teamFromClick || document.getElementById("teamSearch").value;
   let resultDiv = document.getElementById("teamDetails");
 
   if(!window.currentRankings){
@@ -195,6 +214,7 @@ function searchTeam(){
 // Initialize
 loadTeams();
 showPage("pit");
+
 
 
 

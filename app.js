@@ -1,13 +1,12 @@
 // Load Teams
 function loadTeams(){
-  let pitSelect=document.getElementById("pitTeam");
-  let matchSelect=document.getElementById("matchTeam");
+  let teamList = document.getElementById("teamList");
 
   teams.forEach(team=>{
-    pitSelect.innerHTML+=`<option>${team}</option>`;
-    matchSelect.innerHTML+=`<option>${team}</option>`;
+    teamList.innerHTML += `<option value="${team}">`;
   });
 }
+
 
 // Show Page
 function showPage(id){
@@ -214,6 +213,7 @@ function searchTeam(teamFromClick){
 // Initialize
 loadTeams();
 showPage("pit");
+
 
 
 

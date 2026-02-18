@@ -109,5 +109,4 @@ Recommended Usage
 
 
 Built For
-
 Designed to give competitive teams a strategic edge during qualification and elimination rounds.

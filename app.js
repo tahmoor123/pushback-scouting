@@ -121,6 +121,7 @@ function saveMatch(){
 // Live Dashboard + Pick Score
 database.ref("matches").on("value", snapshot=>{
   let data = snapshot.val();
+  console.log("Snapshot data:", data);
   let statsDiv = document.getElementById("stats");
 
   if(!statsDiv) return;
@@ -284,6 +285,7 @@ function getScoutName(){
 // Initialize
 loadTeams();
 showPage("pit");
+
 
 
 

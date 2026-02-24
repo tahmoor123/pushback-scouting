@@ -1,4 +1,6 @@
-console.log("Listener running");
+Object.values(data).forEach(m=>{
+  console.log("Match entry:", m);
+});
 // Load Teams
 function loadTeams(){
   let teamList = document.getElementById("teamList");
@@ -286,6 +288,7 @@ function getScoutName(){
 // Initialize
 loadTeams();
 showPage("pit");
+
 
 
 

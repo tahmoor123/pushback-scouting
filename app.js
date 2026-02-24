@@ -51,6 +51,11 @@ function saveMatch(){
   let team = matchTeam.value;
   let matchNum = matchNumber.value;
 
+  if(!team || !matchNum){
+    alert("Please enter Team and Match Number");
+    return;
+  }
+
   database.ref("matches")
     .orderByChild("team")
     .equalTo(team)
@@ -70,33 +75,40 @@ function saveMatch(){
         return;
       }
 
-      let entry={
+      // 🔥 NEW SCORING CALCULATION
+      let totalScore =
+        Number(matchAuton.value) +
+        Number(descoring.value) +
+        Number(intake.value) +
+        Number(tongue.value) +
+        Number(scoring.value) +
+        Number(design.value) +
+        Number(driving.value);
+
+      let entry = {
         team: team,
         match: matchNum,
-        auto:Number(autoPoints.value),
-        driver:Number(driverPoints.value),
-        endgame:Number(endgamePoints.value),
-        off:Number(offRating.value),
-        def:Number(defRating.value),
+
+        auton: Number(matchAuton.value),
+        descoring: Number(descoring.value),
+        intake: Number(intake.value),
+        tongue: Number(tongue.value),
+        scoring: Number(scoring.value),
+        design: Number(design.value),
+        driving: Number(driving.value),
+
+        total: totalScore,
         comments: matchComments.value,
         scout: getScoutName(),
-        total:Number(autoPoints.value)+
-              Number(driverPoints.value)+
-              Number(endgamePoints.value),
-        timestamp:Date.now()
+        timestamp: Date.now()
       };
 
       database.ref("matches").push(entry);
 
       alert("Match Synced");
 
-      // Clear fields
+      // Auto-clear
       matchNumber.value = "";
-      autoPoints.value = "";
-      driverPoints.value = "";
-      endgamePoints.value = "";
-      offRating.value = "";
-      defRating.value = "";
       matchComments.value = "";
 
       matchNumber.focus();
@@ -159,15 +171,25 @@ database.ref("matches").on("value", snapshot=>{
       (avgDef * 0.15) -
       (stdDev * 0.2);   // penalize inconsistency
 
-    rankings.push({
-      team,
-      avg,
-      avgOff,
-      avgDef,
-      pickScore,
-      stdDev
-    });
-  });
+let scores = teamStats[team].scores;
+let avg = scores.reduce((a,b)=>a+b,0) / scores.length;
+
+let variance = scores.reduce((sum,score)=>{
+  return sum + Math.pow(score - avg,2);
+},0) / scores.length;
+
+let stdDev = Math.sqrt(variance);
+
+let pickScore =
+  (avg * 0.8) -
+  (stdDev * 0.2);
+
+rankings.push({
+  team,
+  avg,
+  stdDev,
+  pickScore
+});
 
   rankings.sort((a,b)=>b.pickScore - a.pickScore);
 
@@ -287,6 +309,7 @@ function getScoutName(){
 // Initialize
 loadTeams();
 showPage("pit");
+
 
 
 

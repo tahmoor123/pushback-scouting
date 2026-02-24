@@ -147,25 +147,26 @@ database.ref("matches").on("value", snapshot=>{
   let rankings = [];
 
   Object.keys(teamStats).forEach(team=>{
-    let scores = teamStats[team].scores;
+  let scores = teamStats[team].scores;
 
-    let avg = scores.reduce((a,b)=>a+b,0) / scores.length;
+  let avg = scores.reduce((a,b)=>a+b,0) / scores.length;
 
-    let variance = scores.reduce((sum,score)=>{
-      return sum + Math.pow(score - avg,2);
-    },0) / scores.length;
+  let variance = scores.reduce((sum,score)=>{
+    return sum + Math.pow(score - avg,2);
+  },0) / scores.length;
 
-    let stdDev = Math.sqrt(variance);
+  let stdDev = Math.sqrt(variance);
 
-    let pickScore = (avg * 0.8) - (stdDev * 0.2);
+  let pickScore = (avg * 0.8) - (stdDev * 0.2);
 
-    rankings.push({
-      team: team,
-      avg: avg,
-      stdDev: stdDev,
-      pickScore: pickScore
-    });
+  rankings.push({
+    team: team,
+    avg: avg,
+    stdDev: stdDev,
+    pickScore: pickScore
+  });
 
+});  
   rankings.sort((a,b)=>b.pickScore - a.pickScore);
 
   let table = "<table border='1' width='100%'>";
@@ -283,6 +284,7 @@ function getScoutName(){
 // Initialize
 loadTeams();
 showPage("pit");
+
 
 
 

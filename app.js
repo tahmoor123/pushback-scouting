@@ -12,8 +12,17 @@ function loadTeams(){
 // Show Page
 function showPage(id){
   document.querySelectorAll(".page")
-    .forEach(p=>p.style.display="none");
-  document.getElementById(id).style.display="block";
+    .forEach(p => p.style.display = "none");
+  document.getElementById(id).style.display = "block";
+
+  document.querySelectorAll(".nav-btn")
+    .forEach(btn => btn.classList.remove("active"));
+  document.querySelectorAll(".nav-btn")
+    .forEach(btn => {
+      if(btn.getAttribute("onclick") === "showPage('" + id + "')"){
+        btn.classList.add("active");
+      }
+    });
 }
 
 // Save Pit Data
@@ -176,11 +185,11 @@ database.ref("matches").on("value", snapshot=>{
 // 🔥 SORT MUST BE OUTSIDE THE LOOP
 rankings.sort((a,b)=>b.pickScore - a.pickScore);
  console.log("Rankings built:", rankings);
-  let table = "<table border='1' width='100%'>";
+  let table = "<table>";
   table += "<tr><th>Rank</th><th>Team</th><th>Avg</th><th>Cons.</th><th>Pick Score</th></tr>";
 
   rankings.forEach((r,i)=>{
-    let highlight = i < 8 ? "style='background:#1f3d1f'" : "";
+    let highlight = i < 8 ? "class='top-pick'" : "";
 
     table += `<tr ${highlight}>
       <td>${i+1}</td>

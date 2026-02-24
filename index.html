@@ -4,142 +4,159 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Parsec Push Back Scouting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <link rel="manifest" href="manifest.json">
 </head>
 <body>
 
 <header>
-<h1>Parsec Prov Push Back Scouting</h1>
+  <h1>Parsec Prov Push Back Scouting</h1>
 </header>
-<h3>Scout Info</h3>
-<input type="text" id="scoutName" placeholder="Enter Your Name">
-<button onclick="saveScoutName()">Save Name</button>
-<hr>
+
+<div class="scout-bar">
+  <label for="scoutName">Scout Info</label>
+  <div class="scout-bar__row">
+    <input type="text" id="scoutName" placeholder="Enter Your Name">
+    <button class="btn" onclick="saveScoutName()">Save Name</button>
+  </div>
+</div>
 
 <nav>
-<button onclick="showPage('pit')">Pit Scouting</button>
-<button onclick="showPage('match')">Match Scouting</button>
-<button onclick="showPage('dashboard')">Dashboard</button>
+  <button class="nav-btn" onclick="showPage('pit')">Pit Scouting</button>
+  <button class="nav-btn" onclick="showPage('match')">Match Scouting</button>
+  <button class="nav-btn" onclick="showPage('dashboard')">Dashboard</button>
 </nav>
 
 <section id="pit" class="page">
-<h2>Pit Scouting</h2>
-<input list="teamList" id="pitTeam" placeholder="Enter Team Number">
-<datalist id="teamList"></datalist>
+  <div class="card">
+    <h2>Pit Scouting</h2>
+    <label for="pitTeam">Team Number</label>
+    <input list="teamList" id="pitTeam" placeholder="Enter Team Number">
+    <datalist id="teamList"></datalist>
 
+    <label for="driveType">Drive Type</label>
+    <select id="driveType">
+      <option>Tank</option>
+      <option>X-Drive</option>
+      <option>H-Drive</option>
+      <option>Custom</option>
+    </select>
 
-<label>Drive Type</label>
-<select id="driveType">
-<option>Tank</option>
-<option>X-Drive</option>
-<option>H-Drive</option>
-<option>Custom</option>
-</select>
+    <label for="autoStrategy">Autonomous Strategy</label>
+    <input id="autoStrategy">
 
-<label>Autonomous Strategy</label>
-<input id="autoStrategy">
+    <label for="cycleSpeed">Cycle Speed</label>
+    <select id="cycleSpeed">
+      <option>Slow</option>
+      <option>Medium</option>
+      <option>Fast</option>
+    </select>
 
-<label>Cycle Speed</label>
-<select id="cycleSpeed">
-<option>Slow</option>
-<option>Medium</option>
-<option>Fast</option>
-</select>
+    <label for="strengths">Strengths</label>
+    <textarea id="strengths"></textarea>
 
-<label>Strengths</label>
-<textarea id="strengths"></textarea>
+    <label for="weaknesses">Weaknesses</label>
+    <textarea id="weaknesses"></textarea>
 
-<label>Weaknesses</label>
-<textarea id="weaknesses"></textarea>
-<label>Additional Comments</label><br>
-<textarea id="pitComments" rows="3" placeholder="Extra notes..."></textarea>
-<br><br>
+    <label for="pitComments">Additional Comments</label>
+    <textarea id="pitComments" rows="3" placeholder="Extra notes..."></textarea>
 
-<button onclick="savePit()">Save Pit Data</button>
+    <button class="btn btn--primary" onclick="savePit()">Save Pit Data</button>
+  </div>
 </section>
 
 <section id="match" class="page">
-<h3>Match Scouting</h3>
+  <div class="card">
+    <h3>Match Scouting</h3>
 
-<label>Team</label><br>
-<input list="teamList" id="matchTeam" placeholder="Enter Team Number"><br><br>
+    <label for="matchTeam">Team</label>
+    <input list="teamList" id="matchTeam" placeholder="Enter Team Number">
 
-<label>Match Number</label><br>
-<input type="number" id="matchNumber"><br><br>
+    <label for="matchNumber">Match Number</label>
+    <input type="number" id="matchNumber">
 
-<label>Match Auton</label><br>
-<select id="matchAuton">
-  <option value="0">No Auton</option>
-  <option value="5">Help in Auton</option>
-  <option value="10">AWP</option>
-</select><br><br>
+    <label for="matchAuton">Match Auton</label>
+    <select id="matchAuton">
+      <option value="0">No Auton</option>
+      <option value="5">Help in Auton</option>
+      <option value="10">AWP</option>
+    </select>
 
-<label>Descoring</label><br>
-<select id="descoring">
-  <option value="0">No Descoring</option>
-  <option value="3">Some</option>
-  <option value="6">Consistent</option>
-  <option value="10">Super</option>
-</select><br><br>
+    <label for="descoring">Descoring</label>
+    <select id="descoring">
+      <option value="0">No Descoring</option>
+      <option value="3">Some</option>
+      <option value="6">Consistent</option>
+      <option value="10">Super</option>
+    </select>
 
-<label>Intake</label><br>
-<select id="intake">
-  <option value="1">Poor</option>
-  <option value="5">Good</option>
-  <option value="8">Excellent</option>
-</select><br><br>
+    <label for="intake">Intake</label>
+    <select id="intake">
+      <option value="1">Poor</option>
+      <option value="5">Good</option>
+      <option value="8">Excellent</option>
+    </select>
 
-<label>TongueMech</label><br>
-<select id="tongue">
-  <option value="1">Poor</option>
-  <option value="5">Good</option>
-  <option value="8">Excellent</option>
-</select><br><br>
+    <label for="tongue">TongueMech</label>
+    <select id="tongue">
+      <option value="1">Poor</option>
+      <option value="5">Good</option>
+      <option value="8">Excellent</option>
+    </select>
 
-<label>Scoring</label><br>
-<select id="scoring">
-  <option value="0">No Scoring</option>
-  <option value="4">Little</option>
-  <option value="8">Good</option>
-</select><br><br>
+    <label for="scoring">Scoring</label>
+    <select id="scoring">
+      <option value="0">No Scoring</option>
+      <option value="4">Little</option>
+      <option value="8">Good</option>
+    </select>
 
-<label>Robot Design</label><br>
-<select id="design">
-  <option value="1">Poor</option>
-  <option value="5">Good</option>
-  <option value="8">Excellent</option>
-</select><br><br>
+    <label for="design">Robot Design</label>
+    <select id="design">
+      <option value="1">Poor</option>
+      <option value="5">Good</option>
+      <option value="8">Excellent</option>
+    </select>
 
-<label>Driving</label><br>
-<select id="driving">
-  <option value="1">Poor</option>
-  <option value="4">Some</option>
-  <option value="7">Good</option>
-  <option value="10">Excellent</option>
-</select><br><br>
+    <label for="driving">Driving</label>
+    <select id="driving">
+      <option value="1">Poor</option>
+      <option value="4">Some</option>
+      <option value="7">Good</option>
+      <option value="10">Excellent</option>
+    </select>
 
-<label>Match Comments</label><br>
-<textarea id="matchComments" rows="3"></textarea><br><br>
+    <label for="matchComments">Match Comments</label>
+    <textarea id="matchComments" rows="3"></textarea>
 
-<button onclick="saveMatch()">Save Match</button>
+    <button class="btn btn--primary" onclick="saveMatch()">Save Match</button>
+  </div>
 </section>
 
 <section id="dashboard" class="page">
-  <h2>Analytics</h2>
+  <div class="card">
+    <h2>Analytics</h2>
 
-  <h3>Search Team</h3>
-  <input type="text" id="teamSearch" placeholder="Enter Team Number">
-  <button onclick="searchTeam()">Search</button>
+    <h3>Search Team</h3>
+    <div class="search-row">
+      <input type="text" id="teamSearch" placeholder="Enter Team Number">
+      <button class="btn btn--secondary" onclick="searchTeam()">Search</button>
+    </div>
 
-  <div id="teamDetails"></div>
-  <hr>
+    <div id="teamDetails"></div>
 
-  <h2>Dashboard</h2>
-  <div id="stats"></div>
+    <h2>Dashboard</h2>
+    <div id="stats"></div>
 
-  <button onclick="exportCSV()">Export CSV</button>
+    <div class="export-row">
+      <button class="btn btn--secondary" onclick="exportCSV()">Export CSV</button>
+    </div>
+  </div>
 </section>
+
 <!-- Firebase CDN -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
@@ -164,12 +181,3 @@
 </body>
 
 </html>
-
-
-
-
-
-
-
-
-

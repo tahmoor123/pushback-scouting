@@ -1,6 +1,4 @@
-Object.values(data).forEach(m=>{
-  console.log("Match entry:", m);
-});
+
 // Load Teams
 function loadTeams(){
   let teamList = document.getElementById("teamList");
@@ -125,6 +123,11 @@ function saveMatch(){
 database.ref("matches").on("value", snapshot=>{
   let data = snapshot.val();
   console.log("Snapshot data:", data);
+  if(data){
+    Object.values(data).forEach(m=>{
+      console.log("Match entry:", m);
+    });
+  }
   let statsDiv = document.getElementById("stats");
 
   if(!statsDiv) return;
@@ -288,6 +291,7 @@ function getScoutName(){
 // Initialize
 loadTeams();
 showPage("pit");
+
 
 
 

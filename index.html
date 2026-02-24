@@ -125,19 +125,20 @@
 <button onclick="saveMatch()">Save Match</button>
 
 <section id="dashboard" class="page">
-<h2>Analytics</h2>
-<h3>Search Team</h3>
-<input type="text" id="teamSearch" placeholder="Enter Team Number">
-<button onclick="searchTeam()">Search</button>
+  <h2>Analytics</h2>
 
-<div id="teamDetails"></div>
-<hr>
+  <h3>Search Team</h3>
+  <input type="text" id="teamSearch" placeholder="Enter Team Number">
+  <button onclick="searchTeam()">Search</button>
 
-<div id="dashboard" class="page">
-  <h2>Dashboard</h2>
-<div id="stats"></div>
-</div>
-<button onclick="exportCSV()">Export CSV</button>
+  <div id="teamDetails"></div>
+
+  <hr>
+
+  <h2>Rankings</h2>
+  <div id="stats"></div>
+
+  <button onclick="exportCSV()">Export CSV</button>
 </section>
 <!-- Firebase CDN -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
@@ -163,6 +164,7 @@
 </body>
 
 </html>
+
 
 
 

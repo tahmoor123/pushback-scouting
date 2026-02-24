@@ -1,3 +1,4 @@
+console.log("Listener running");
 // Load Teams
 function loadTeams(){
   let teamList = document.getElementById("teamList");
@@ -285,6 +286,7 @@ function getScoutName(){
 // Initialize
 loadTeams();
 showPage("pit");
+
 
 
 

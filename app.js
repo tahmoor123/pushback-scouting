@@ -128,7 +128,7 @@ database.ref("matches").on("value", snapshot=>{
       console.log("Match entry:", m);
     });
   }
-  let statsDiv = document.getElementById("match");
+  let statsDiv = document.getElementById("teamDetails");
 
   if(!statsDiv) return;
 
@@ -291,6 +291,7 @@ function getScoutName(){
 // Initialize
 loadTeams();
 showPage("pit");
+
 
 
 

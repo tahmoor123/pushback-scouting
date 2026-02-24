@@ -143,7 +143,7 @@ database.ref("matches").on("value", snapshot=>{
 
     teamStats[m.team].scores.push(m.total || 0);
   });
-
+  console.log("TeamStats:", teamStats);
   let rankings = [];
   Object.keys(teamStats).forEach(team=>{
   let scores = teamStats[team].scores;
@@ -170,7 +170,7 @@ database.ref("matches").on("value", snapshot=>{
 
 // 🔥 SORT MUST BE OUTSIDE THE LOOP
 rankings.sort((a,b)=>b.pickScore - a.pickScore);
- 
+ console.log("Rankings built:", rankings);
   let table = "<table border='1' width='100%'>";
   table += "<tr><th>Rank</th><th>Team</th><th>Avg</th><th>Cons.</th><th>Pick Score</th></tr>";
 
@@ -286,6 +286,7 @@ function getScoutName(){
 // Initialize
 loadTeams();
 showPage("pit");
+
 
 
 

@@ -135,61 +135,37 @@ database.ref("matches").on("value", snapshot=>{
   Object.values(data).forEach(m=>{
     if(!teamStats[m.team]){
       teamStats[m.team] = {
-        scores: [],
-        off:0,
-        def:0,
-        count:0
+        scores: []
       };
     }
 
-    teamStats[m.team].scores.push(m.total);
-    teamStats[m.team].off += m.off;
-    teamStats[m.team].def += m.def;
-    teamStats[m.team].count++;
+    teamStats[m.team].scores.push(m.total || 0);
   });
 
   let rankings = [];
 
   Object.keys(teamStats).forEach(team=>{
     let scores = teamStats[team].scores;
+
     let avg = scores.reduce((a,b)=>a+b,0) / scores.length;
 
-    // Consistency (standard deviation)
     let variance = scores.reduce((sum,score)=>{
       return sum + Math.pow(score - avg,2);
     },0) / scores.length;
 
     let stdDev = Math.sqrt(variance);
 
-    let avgOff = teamStats[team].off / teamStats[team].count;
-    let avgDef = teamStats[team].def / teamStats[team].count;
-
-    // 🔥 PICK SCORE WITH CONSISTENCY BONUS
     let pickScore =
-      (avg * 0.5) +
-      (avgOff * 0.15) +
-      (avgDef * 0.15) -
-      (stdDev * 0.2);   // penalize inconsistency
+      (avg * 0.8) -
+      (stdDev * 0.2);
 
-let scores = teamStats[team].scores;
-let avg = scores.reduce((a,b)=>a+b,0) / scores.length;
-
-let variance = scores.reduce((sum,score)=>{
-  return sum + Math.pow(score - avg,2);
-},0) / scores.length;
-
-let stdDev = Math.sqrt(variance);
-
-let pickScore =
-  (avg * 0.8) -
-  (stdDev * 0.2);
-
-rankings.push({
-  team,
-  avg,
-  stdDev,
-  pickScore
-});
+    rankings.push({
+      team,
+      avg,
+      stdDev,
+      pickScore
+    });
+  });
 
   rankings.sort((a,b)=>b.pickScore - a.pickScore);
 
@@ -257,8 +233,7 @@ function searchTeam(teamFromClick){
       resultDiv.innerHTML = `
         <h3>Team ${team.team}</h3>
         <p><b>Avg Score:</b> ${team.avg.toFixed(1)}</p>
-        <p><b>Off Rating:</b> ${team.avgOff.toFixed(1)}</p>
-        <p><b>Def Rating:</b> ${team.avgDef.toFixed(1)}</p>
+        <p><b>Consistency:</b> ${team.stdDev.toFixed(1)}</p>
         <p><b>Pick Score:</b> ${team.pickScore.toFixed(1)}</p>
 
         <hr>
@@ -309,6 +284,7 @@ function getScoutName(){
 // Initialize
 loadTeams();
 showPage("pit");
+
 
 
 

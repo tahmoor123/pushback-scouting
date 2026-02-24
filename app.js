@@ -157,17 +157,14 @@ database.ref("matches").on("value", snapshot=>{
 
     let stdDev = Math.sqrt(variance);
 
-    let pickScore =
-      (avg * 0.8) -
-      (stdDev * 0.2);
+    let pickScore = (avg * 0.8) - (stdDev * 0.2);
 
     rankings.push({
-      team,
-      avg,
-      stdDev,
-      pickScore
+      team: team,
+      avg: avg,
+      stdDev: stdDev,
+      pickScore: pickScore
     });
-  });
 
   rankings.sort((a,b)=>b.pickScore - a.pickScore);
 
@@ -286,6 +283,7 @@ function getScoutName(){
 // Initialize
 loadTeams();
 showPage("pit");
+
 
 
 
